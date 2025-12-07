@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loja do Kratos - Suplementos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #050505;
+      --text-gold: #e3b341;
+      --text-silver: #9ca3af;
+      --accent-blue: #3b82f6;
+      --accent-red: #b91d1d;
+      --rare-common: #4b5563;
+      --font-title: 'Cinzel', serif;
+      --font-ui: 'Roboto Condensed', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-deep);
+      font-family: var(--font-ui);
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
+    .font-cinzel { font-family: var(--font-title); }
+    .font-roboto { font-family: var(--font-ui); }
+
+    @keyframes snowfall { 
+      0% { background-position: 0 0; } 
+      100% { background-position: 100px 500px; } 
+    }
+    
+    .animate-snow { animation: snowfall 20s linear infinite; }
+
+    .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .admin-input {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 8px;
+      width: 100%;
+      font-family: var(--font-ui);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .admin-input:focus { border-color: var(--text-gold); }
+    
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #111; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+
+    .oracle-message { animation: slideIn 0.3s ease-out; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .card-3d { transition: transform 0.1s ease-out; }
+  </style>
+</head>
+<body class="min-h-screen text-gray-400 relative">
+  <!-- Custom Cursor -->
+  <div id="cursor-dot" class="fixed w-[6px] h-[6px] bg-white rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+  <div id="cursor-outline" class="fixed w-[35px] h-[35px] border border-white/30 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-colors duration-100 hidden md:block"></div>
+
+  <!-- Background -->
+  <div class="fixed inset-0 w-full h-full z-[-2] pointer-events-none" style="background-image: radial-gradient(circle at 50% 50%, #1a202c 0%, #000 90%)"></div>
+  <div class="fixed inset-0 w-full h-full z-[-1] opacity-20 pointer-events-none animate-snow" style="background-image: url('https://raw.githubusercontent.com/tsparticles/tsparticles/main/images/snow.png')"></div>
+
+  <!-- Landing Page -->
+  <div id="landing-page" class="min-h-screen flex flex-col items-center justify-center relative z-10 p-6 fade-in">
+    <div class="text-center mb-12">
+      <h2 class="text-[#b91d1d] text-sm tracking-[0.5em] mb-2 font-cinzel animate-pulse">BEM-VINDO GUERREIRO</h2>
+      <h1 class="font-cinzel text-5xl md:text-7xl font-bold text-white tracking-widest drop-shadow-2xl">
+        LOJA DO KRATOS
+      </h1>
+      <div class="w-24 h-1 bg-[#e3b341] mx-auto mt-6 shadow-[0_0_15px_#e3b341]"></div>
+    </div>
+
+    <div id="category-menu" class="w-full max-w-2xl space-y-4"></div>
+
+    <!-- Instagram Button -->
+    <a href="https://www.instagram.com/lojadokratos_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="mt-10 flex items-center gap-3 px-6 py-3 border border-white/20 bg-white/5 hover:bg-gradient-to-r hover:from-purple-600/20 hover:via-pink-500/20 hover:to-orange-400/20 hover:border-pink-500/50 transition-all duration-300 group">
+      <svg class="w-6 h-6 fill-current text-white group-hover:text-pink-500 transition-colors" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+      <span class="font-roboto text-sm uppercase tracking-widest text-gray-400 group-hover:text-white transition-colors">Siga-nos no Instagram</span>
+    </a>
+
+    <div class="mt-8 text-xs text-gray-600 font-roboto uppercase tracking-widest">
+      Pressione o botão para selecionar sua categoria
+    </div>
+  </div>
+
+  <!-- Shop Page -->
+  <div id="shop-page" class="fade-in hidden">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 flex justify-between items-center px-6 py-6 md:px-12 border-b border-white/5 backdrop-blur-md bg-gradient-to-b from-[#050505]/95 to-[#050505]/80">
+      <div class="flex items-center gap-4">
+        <button id="back-btn" class="text-white/50 hover:text-white font-cinzel text-xs uppercase tracking-widest border border-white/20 px-3 py-1 hover:border-white transition-all">
+          ← Voltar
+        </button>
+        
+        <button id="admin-lock-btn" class="text-white/30 hover:text-[#e3b341] p-2 transition-colors" title="Acesso Restrito">🔒</button>
+
+        <div class="font-cinzel text-xl md:text-2xl font-bold text-white tracking-widest hidden md:block">
+          LOJA DO <span class="text-[#b91d1d]">KRATOS</span>
+        </div>
+      </div>
+
+      <nav id="nav-tabs" class="hidden xl:flex gap-6"></nav>
+
+      <div class="flex items-center gap-4">
+        <a href="https://www.instagram.com/lojadokratos_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="text-2xl hover:scale-110 transition-transform hover:text-pink-500" title="Siga-nos no Instagram">
+          <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+          </svg>
+        </a>
+
+        <button id="oracle-btn" class="text-2xl hover:scale-110 transition-transform animate-pulse" title="Consultar o Oráculo">👁️</button>
+
+        <div id="cart-toggle" class="flex items-center gap-4 border border-white/10 px-4 py-2 bg-white/5 hover:bg-white/10 hover:border-white/30 transition-all duration-300 group cursor-pointer">
+          <div class="relative">
+            <span class="font-roboto text-[0.7rem] uppercase tracking-widest opacity-70 group-hover:text-white">Inventário</span>
+            <span id="cart-badge" class="absolute -top-2 -right-2 w-4 h-4 bg-[#b91d1d] text-white text-[0.6rem] rounded-full flex items-center justify-center font-bold hidden">0</span>
+          </div>
+          <span class="opacity-30">|</span>
+          <span id="cart-total-header" class="text-white font-bold tracking-wide font-roboto group-hover:text-[#e3b341]">R$ 0.00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="max-w-[1400px] mx-auto p-5 md:p-10 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10">
+      <!-- Sidebar -->
+      <aside class="hidden lg:block p-5 border-l border-white/10 sticky top-[100px] h-fit">
+        <h2 class="font-cinzel text-white text-lg border-b border-white/10 pb-2.5 mb-5">Status Atuais</h2>
+        
+        <div id="player-stats" class="space-y-3 font-roboto text-sm uppercase tracking-widest"></div>
+
+        <div class="mt-8 border-t border-white/10 pt-4">
+          <p class="text-[0.7rem] text-gray-600 mb-1 font-roboto tracking-wider">OBJETIVO</p>
+          <div class="text-2xl font-cinzel text-gray-300 animate-pulse">GOD MODE</div>
+        </div>
+
+        <!-- New Uniform Launch Video -->
+        <div class="mt-8 border-t border-white/10 pt-4">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[#b91d1d] animate-pulse">🔥</span>
+            <p class="text-[0.7rem] text-[#e3b341] font-roboto tracking-wider uppercase font-bold">Lançamento</p>
+            <span class="text-[0.6rem] bg-[#b91d1d] text-white px-1.5 py-0.5 rounded font-bold animate-pulse">NOVO</span>
+          </div>
+          <h3 class="font-cinzel text-white text-sm mb-3 tracking-wide">UNIFORME OFICIAL</h3>
+          <div class="relative group overflow-hidden border border-white/20 hover:border-[#e3b341]/50 transition-all duration-300 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+            <video 
+              class="w-full h-auto object-cover cursor-pointer" 
+              src="https://i.imgur.com/er2uXrb.mp4" 
+              loop 
+              muted 
+              playsinline
+              autoplay
+              onmouseover="this.play()" 
+              onmouseout="this.play()"
+            ></video>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+            <div class="absolute bottom-2 left-2 right-2 flex justify-between items-center pointer-events-none">
+              <span class="text-[0.6rem] text-white/80 font-roboto uppercase tracking-wider">⚔️ Armadura Espartana</span>
+              <span class="text-[0.6rem] text-[#e3b341] font-bold">EM BREVE</span>
+            </div>
+          </div>
+          <p class="text-[0.65rem] text-gray-500 mt-2 font-roboto italic text-center">Vista-se como um verdadeiro guerreiro</p>
+        </div>
+      </aside>
+
+      <!-- Grid -->
+      <section id="products-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"></section>
+    </main>
+
+    <!-- Footer HUD -->
+    <div class="fixed bottom-0 left-0 w-full p-6 md:px-12 bg-gradient-to-t from-black to-transparent flex justify-end gap-8 pointer-events-none z-40">
+      <div class="text-gray-400 text-xs uppercase flex items-center gap-2 font-roboto">
+        <span class="w-4 h-4 border border-current rounded-full inline-flex items-center justify-center text-[0.6rem]">X</span> Comprar
+      </div>
+      <div class="text-gray-400 text-xs uppercase flex items-center gap-2 font-roboto">
+        <span class="w-4 h-4 border border-current rounded-full inline-flex items-center justify-center text-[0.6rem]">O</span> Detalhes
+      </div>
+      <div class="text-gray-400 text-xs uppercase flex items-center gap-2 font-roboto">
+        <span class="w-4 h-4 border border-current rounded-full inline-flex items-center justify-center text-[0.6rem]">△</span> Tabela
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
+  <div id="cart-backdrop" class="fixed inset-0 bg-black/80 z-[70] backdrop-blur-sm transition-opacity duration-300 hidden"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full md:w-[400px] bg-[#0a0a0a] border-l border-[#e3b341]/30 z-[80] transform translate-x-full transition-transform duration-300 shadow-2xl flex flex-col">
+    <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#111]">
+      <h2 class="font-cinzel text-xl text-[#e3b341] tracking-widest flex items-center gap-2">
+        <span>🎒</span> INVENTÁRIO
+      </h2>
+      <button id="cart-close" class="text-gray-500 hover:text-white text-xl">✕</button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar"></div>
+
+    <div class="p-6 border-t border-white/10 bg-[#111]">
+      <div class="flex justify-between items-end mb-4 font-cinzel">
+        <span class="text-gray-400 text-sm">TOTAL</span>
+        <span id="cart-total" class="text-2xl text-[#e3b341] font-bold">R$ 0.00</span>
+      </div>
+      <button id="checkout-btn" class="w-full py-3 bg-[#e3b341] text-black font-bold font-roboto uppercase tracking-widest hover:bg-[#c2952d] transition-all relative overflow-hidden group">
+        <span class="relative z-10">Finalizar Compra via WhatsApp</span>
+        <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Oracle Chat -->
+  <div id="oracle-chat" class="fixed bottom-20 right-6 w-80 md:w-96 h-96 bg-[#0a0a0a] border border-[#e3b341] flex-col shadow-[0_0_20px_rgba(227,179,65,0.3)] z-[60] fade-in rounded-lg overflow-hidden hidden">
+    <div class="bg-[#1a1a1a] p-3 border-b border-[#e3b341]/30 flex justify-between items-center">
+      <h3 class="font-cinzel text-[#e3b341] flex items-center gap-2">
+        <span>👁️</span> Oráculo de Esparta
+      </h3>
+      <button id="oracle-close" class="text-gray-500 hover:text-white">✕</button>
+    </div>
+    
+    <div id="oracle-messages" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar"></div>
+
+    <form id="oracle-form" class="p-3 border-t border-white/10 bg-[#111]">
+      <div class="flex gap-2">
+        <input id="oracle-input" placeholder="Pergunte ao Oráculo..." class="flex-1 bg-black border border-white/20 rounded px-3 py-2 text-xs text-white focus:border-[#e3b341] outline-none"/>
+        <button type="submit" class="bg-[#e3b341] text-black px-3 rounded hover:bg-[#c2952d] font-bold">➤</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md hidden">
+    <div class="bg-[#1a1a1a] border border-white/20 p-8 w-80 text-center">
+      <h3 class="font-cinzel text-white mb-6 tracking-widest">ACESSO RESTRITO</h3>
+      <form id="login-form">
+        <input type="password" id="login-password" placeholder="SENHA" class="admin-input text-center text-xl tracking-[0.5em] mb-4" autofocus/>
+        <div id="login-error" class="text-[#b91d1d] text-xs mb-4 hidden">SENHA INCORRETA</div>
+        <div class="flex gap-2">
+          <button type="button" id="login-cancel" class="flex-1 py-2 border border-gray-600 text-xs text-white">VOLTAR</button>
+          <button type="submit" class="flex-1 py-2 bg-[#e3b341] text-black text-xs font-bold">ENTRAR</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md hidden">
+    <div class="w-full max-w-5xl h-[80vh] flex border border-[#e3b341] shadow-[0_0_30px_rgba(227,179,65,0.15)] bg-[#111]">
+      <!-- Left: Inventory List -->
+      <div class="w-1/3 border-r border-white/10 flex flex-col">
+        <div class="p-4 border-b border-white/10 bg-[#1a1a1a]">
+          <h2 id="admin-count" class="font-cinzel text-[#e3b341]">Inventário (0)</h2>
+          <button id="admin-new-btn" class="mt-2 w-full py-2 bg-white/5 hover:bg-white/10 text-xs uppercase border border-white/20 text-white">
+            + Criar Novo Item
+          </button>
+        </div>
+        <div id="admin-list" class="overflow-y-auto flex-1 custom-scrollbar p-2 space-y-2"></div>
+      </div>
+
+      <!-- Right: Form -->
+      <div class="flex-1 p-8 overflow-y-auto custom-scrollbar bg-[#1a1a1a]">
+        <div class="flex justify-between items-center mb-6">
+          <h2 id="admin-form-title" class="font-cinzel text-2xl text-[#e3b341]">Novo Item</h2>
+          <button id="admin-close" class="text-gray-500 hover:text-white">✕</button>
+        </div>
+      
+        <form id="admin-form" class="space-y-5 font-roboto text-sm">
+          <div class="grid grid-cols-3 gap-5">
+            <div class="col-span-2">
+              <label class="block text-gray-400 mb-1">Nome do Item</label>
+              <input id="item-name" required class="admin-input"/>
+            </div>
+            <div>
+              <label class="block text-[#e3b341] mb-1 font-bold">Preço (R$)</label>
+              <input type="number" step="0.01" id="item-price" required class="admin-input border-[#e3b341]/50 text-[#e3b341]" placeholder="0.00"/>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-5">
+            <div>
+              <label class="block text-gray-400 mb-1">Tipo</label>
+              <select id="item-type" class="admin-input">
+                <option value="proteina">Proteína</option>
+                <option value="pre-treino">Pré-Treino</option>
+                <option value="saude">Saúde</option>
+                <option value="acessorios">Acessórios</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Raridade</label>
+              <select id="item-rarity" class="admin-input">
+                <option value="comum">Comum</option>
+                <option value="raro">Raro</option>
+                <option value="lendario">Lendário</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-400 mb-1">URL da Imagem</label>
+            <div class="flex gap-2">
+              <input id="item-image" class="admin-input flex-1" placeholder="https://..."/>
+              <div id="item-image-preview" class="w-10 h-10 border border-white/20 rounded overflow-hidden hidden">
+                <img id="item-image-img" class="w-full h-full object-cover"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-5">
+            <div>
+              <label class="block text-gray-400 mb-1">Ícone (Emoji)</label>
+              <input id="item-icon" class="admin-input text-center" value="📦"/>
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Stats (separar por ,)</label>
+              <input id="item-stats" class="admin-input" placeholder="Força, Foco..."/>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="block text-gray-400">Descrição</label>
+              <button type="button" id="generate-desc-btn" class="text-xs text-[#e3b341] border border-[#e3b341] px-2 py-0.5 rounded hover:bg-[#e3b341] hover:text-black transition-colors">
+                Gerar Descrição Épica ✨
+              </button>
+            </div>
+            <textarea id="item-desc" rows="4" class="admin-input resize-none"></textarea>
+          </div>
+
+          <div class="pt-6 border-t border-white/10 flex gap-4">
+            <button type="button" id="delete-item-btn" class="flex-1 py-3 bg-[#b91d1d]/20 border border-[#b91d1d] text-[#b91d1d] hover:bg-[#b91d1d] hover:text-white transition-colors uppercase tracking-wider font-bold hidden">
+              Excluir Item
+            </button>
+            <button type="submit" id="save-item-btn" class="flex-[2] py-3 bg-[#e3b341] text-black font-bold hover:bg-[#c2952d] transition-colors uppercase tracking-wider">
+              Cadastrar Item
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- DATA ---
+    const INITIAL_INVENTORY = [
+      { id: 1, name: "Coqueteleira FTW", type: "acessorios", rarity: "comum", price: 30.00, image: "https://i.imgur.com/wtFpQ8l.png", icon: "🥤", stats: ["600ml", "Resistente"], desc: "Misture suas poções com precisão e estilo tático." },
+      { id: 2, name: "Coqueteleira Universal", type: "acessorios", rarity: "comum", price: 30.00, image: "https://i.imgur.com/TUOFoKV.png", icon: "🥤", stats: ["Clássica", "Durável"], desc: "O padrão ouro dos recipientes de batalha." },
+      { id: 3, name: "Coqueteleira Venom Labs", type: "acessorios", rarity: "raro", price: 30.00, image: "https://i.imgur.com/Oe7BeZg.png", icon: "🥤", stats: ["Estilo", "Antivazamento"], desc: "Design agressivo para treinos intensos." },
+      { id: 4, name: "Strap", type: "acessorios", rarity: "comum", price: 20.00, image: "https://i.imgur.com/hMnbxSw.png", icon: "🎗️", stats: ["Pegada +10", "Tração"], desc: "Não deixe a carga escapar das suas mãos de guerreiro." },
+      { id: 5, name: "Hipercalórico Super Whey Max Titanium 900g", type: "proteina", rarity: "raro", price: 80.00, image: "https://i.imgur.com/CY7v71T.png", icon: "🏔️", stats: ["Massa Bruta", "Carbo+"], desc: "Ganho de peso e energia explosiva sabor Baunilha." },
+      { id: 6, name: "Whey 100% HD Black Skull 900g", type: "proteina", rarity: "lendario", price: 110.00, image: "https://i.imgur.com/ICww0nz.png", icon: "💀", stats: ["21g Proteína", "Concentrado"], desc: "Recuperação de elite sabor Baunilha. Caveira pura." },
+      { id: 7, name: "Protein Fusion Venom Labs 1kg", type: "proteina", rarity: "raro", price: 100.00, image: "https://i.imgur.com/voFrVL5.png", icon: "🧪", stats: ["Blend", "Saboroso"], desc: "Fusão de proteínas: Leitinho Trufado, Cookies e Chocolate." },
+      { id: 8, name: "Whey Mix Power 900g", type: "proteina", rarity: "comum", price: 65.00, image: "https://i.imgur.com/IvQfnI7.png", icon: "⚡", stats: ["Custo-Benefício", "Energia"], desc: "Proteína básica sabor Baunilha para o dia a dia." },
+      { id: 9, name: "Proteina Vegana Emana 450g", type: "proteina", rarity: "raro", price: 100.00, image: "https://i.imgur.com/AryjMdq.png", icon: "🌿", stats: ["Plant Based", "Natural"], desc: "Poder da natureza sabor Chocolate com Avelã." },
+      { id: 10, name: "Creatine Turbo Black Skull 150g", type: "saude", rarity: "comum", price: 35.00, image: "https://i.imgur.com/RbSL4av.png", icon: "🔋", stats: ["Explosão", "Carbo Fuel"], desc: "Combustível rápido (Limão e Laranja) para força." },
+      { id: 11, name: "Creatina Ronnie Coleman 300g", type: "saude", rarity: "lendario", price: 80.00, image: "https://i.imgur.com/Y5DC1cc.png", icon: "👑", stats: ["Yeah Buddy", "Pura"], desc: "A creatina do rei. Lightweight baby!" },
+      { id: 12, name: "Creatine Turbo Black Skull 300g", type: "saude", rarity: "raro", price: 50.00, image: "https://i.imgur.com/Ge5Bgtn.png", icon: "🔋", stats: ["300g", "Turbo"], desc: "Versão maior para campanhas longas e duradouras." },
+      { id: 13, name: "Creatina Max Titanium 300g", type: "saude", rarity: "raro", price: 90.00, image: "https://i.imgur.com/joLJ9zX.png", icon: "🧱", stats: ["Monohidratada", "Pura"], desc: "Qualidade máxima para construção de força bruta." },
+      { id: 14, name: "Omega 3 Neoquimica 60 cáps", type: "saude", rarity: "comum", price: 40.00, image: "https://i.imgur.com/Da92qv0.png", icon: "🐟", stats: ["Saúde", "Coração"], desc: "Óleo essencial para manutenção da máquina humana." },
+      { id: 15, name: "Pré Hormonal Testodrol Profit 60 cáps", type: "saude", rarity: "raro", price: 60.00, image: "https://i.imgur.com/sJ6s1EM.png", icon: "🐂", stats: ["Testo+", "Força"], desc: "Maximize seus hormônios naturais para a batalha." },
+      { id: 17, name: "Colágeno Hidrolisado + Vit C Profit", type: "saude", rarity: "comum", price: 60.00, image: "https://i.imgur.com/oirkgAc.png", icon: "✨", stats: ["Pele", "Articulação"], desc: "Reforce sua armadura natural (150 cápsulas)." },
+      { id: 19, name: "Multivitamínico A-Z Neoquimica", type: "saude", rarity: "comum", price: 35.00, image: "https://i.imgur.com/F9KeEdX.png", icon: "💊", stats: ["Imunidade", "Vitalidade"], desc: "Todos os buffs necessários em 60 cápsulas." },
+      { id: 16, name: "Termogênico Pro Abdômen Profit", type: "pre-treino", rarity: "comum", price: 60.00, image: "https://i.imgur.com/v5RE5Sf.png", icon: "🔥", stats: ["Queima", "Definição"], desc: "Derreta a gordura e revele os músculos (60 cáps)." },
+      { id: 18, name: "Pré Treino Panic Adaptogen 300g", type: "pre-treino", rarity: "lendario", price: 90.00, image: "https://i.imgur.com/tCHgQXr.png", icon: "🤡", stats: ["Foco", "Energia"], desc: "Treinos insanos com sabor Laranja e Manga." },
+      { id: 20, name: "Pré Treino Warzone 150g", type: "pre-treino", rarity: "raro", price: 65.00, image: "https://i.imgur.com/IBQReSm.png", icon: "☣️", stats: ["Pump", "Tático"], desc: "Prepare-se para a zona de guerra. Sabor Passion/Fury." },
+      { id: 21, name: "Pré Treino Diabo Verde 150g", type: "pre-treino", rarity: "raro", price: 60.00, image: "https://i.imgur.com/zTKra1a.png", icon: "🟢", stats: ["Extremo", "Acorda"], desc: "Energia endiabrada para despertar sua fúria." },
+      { id: 22, name: "Vitamina C + Zinco Profit 60 cápsulas", type: "saude", rarity: "comum", price: 35.00, image: "https://i.imgur.com/XOKfw0R.png", icon: "🍊", stats: ["Imunidade", "Antioxidante"], desc: "Escudo divino contra as pragas do mundo mortal." },
+      { id: 23, name: "Hipercalórico Predator Mass 3Kg", type: "proteina", rarity: "lendario", price: 110.00, image: "https://i.imgur.com/mDGKsBR.png", icon: "🦖", stats: ["3Kg", "Massa Brutal"], desc: "O predador da magreza. Sabores Leitinho Trufado e Chocolate ao Leite." },
+      { id: 24, name: "Melatonina Neoquimica 90 cápsulas", type: "saude", rarity: "raro", price: 40.00, image: "https://i.imgur.com/5bgNEkX.png", icon: "🌙", stats: ["Sono", "Recuperação"], desc: "O descanso dos guerreiros. Durma como os deuses." },
+      { id: 25, name: "Beta Alanina Soldiers 500g", type: "proteina", rarity: "raro", price: 65.00, image: "https://i.imgur.com/Xfa5UIO.png", icon: "⚔️", stats: ["Resistência", "Anti-Fadiga"], desc: "Prolongue sua batalha. O formigamento é sinal de poder." },
+      { id: 26, name: "Magnésio Plus + Vitamina B6 Vitafor 90 cápsulas", type: "saude", rarity: "raro", price: 65.00, image: "https://i.imgur.com/qb67p9q.png", icon: "🧲", stats: ["Músculos", "Nervos"], desc: "Relaxamento muscular e força mental dos titãs." },
+      { id: 27, name: "Termogênico Thermo Flame Black Skull 60 cápsulas", type: "pre-treino", rarity: "raro", price: 45.00, image: "https://i.imgur.com/d52w2V4.png", icon: "💀🔥", stats: ["Queima", "Metabolismo"], desc: "A chama negra que devora a gordura dos fracos." }
+    ];
+
+    const categories = [
+      { id: 'all', label: 'INVENTÁRIO COMPLETO', desc: 'Acesso a todos os itens da loja' },
+      { id: 'proteina', label: 'PROTEÍNAS & MASSAS', desc: 'Força bruta e recuperação' },
+      { id: 'pre-treino', label: 'PRÉ-TREINOS E TERMOGÊNICOS', desc: 'Energia do caos e foco' },
+      { id: 'saude', label: 'VITAMINAS E AMINOÁCIDOS', desc: 'Resistência divina' },
+      { id: 'acessorios', label: 'ACESSÓRIOS', desc: 'Equipamento de batalha' }
+    ];
+
+    const navTabs = [
+      { id: 'all', label: 'Tudo' },
+      { id: 'proteina', label: 'Proteínas' },
+      { id: 'pre-treino', label: 'Pré-Treinos e Termogênicos' },
+      { id: 'saude', label: 'Vitaminas e Aminoácidos' },
+      { id: 'acessorios', label: 'Acessórios' }
+    ];
+
+    // --- STATE ---
+    let inventory = [...INITIAL_INVENTORY];
+    let cart = JSON.parse(localStorage.getItem('kratosCart')) || [];
+    let currentFilter = 'all';
+    let currentView = 'landing';
+    let selectedAdminItem = null;
+    let oracleMessages = [{ role: 'system', text: "Saudações, guerreiro. Eu sou o Oráculo. Que suprimentos buscas para a tua batalha?" }];
+
+    // --- DOM ELEMENTS ---
+    const landingPage = document.getElementById('landing-page');
+    const shopPage = document.getElementById('shop-page');
+    const categoryMenu = document.getElementById('category-menu');
+    const productsGrid = document.getElementById('products-grid');
+    const navTabsContainer = document.getElementById('nav-tabs');
+    const playerStatsContainer = document.getElementById('player-stats');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartBackdrop = document.getElementById('cart-backdrop');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotal = document.getElementById('cart-total');
+    const cartTotalHeader = document.getElementById('cart-total-header');
+    const cartBadge = document.getElementById('cart-badge');
+    const oracleChat = document.getElementById('oracle-chat');
+    const oracleMessagesContainer = document.getElementById('oracle-messages');
+    const loginModal = document.getElementById('login-modal');
+    const adminModal = document.getElementById('admin-modal');
+    const adminList = document.getElementById('admin-list');
+
+    // --- CUSTOM CURSOR ---
+    const cursorDot = document.getElementById('cursor-dot');
+    const cursorOutline = document.getElementById('cursor-outline');
+
+    document.addEventListener('mousemove', (e) => {
+      cursorDot.style.left = `${e.clientX}px`;
+      cursorDot.style.top = `${e.clientY}px`;
+      cursorOutline.style.left = `${e.clientX}px`;
+      cursorOutline.style.top = `${e.clientY}px`;
+    });
+
+    document.addEventListener('mousedown', () => {
+      cursorOutline.style.width = '25px';
+      cursorOutline.style.height = '25px';
+      cursorOutline.style.borderColor = 'var(--accent-red)';
+    });
+
+    document.addEventListener('mouseup', () => {
+      cursorOutline.style.width = '35px';
+      cursorOutline.style.height = '35px';
+      cursorOutline.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+    });
+
+    // --- KONAMI CODE ---
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiCursor = 0;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === konamiCode[konamiCursor]) {
+        konamiCursor++;
+        if (konamiCursor === konamiCode.length) {
+          openAdminModal();
+          konamiCursor = 0;
+        }
+      } else {
+        konamiCursor = 0;
+      }
+    });
+
+    // --- UTILITY FUNCTIONS ---
+    function saveCart() {
+      localStorage.setItem('kratosCart', JSON.stringify(cart));
+    }
+
+    function calculatePlayerStats() {
+      let stats = { hipertrofia: 10, energia: 20, foco: 10, bf: 20 };
+      cart.forEach(item => {
+        const qty = item.quantity;
+        if (item.type === 'proteina') { stats.hipertrofia += 10 * qty; stats.bf -= 1 * qty; }
+        if (item.type === 'pre-treino') { stats.energia += 15 * qty; stats.foco += 15 * qty; stats.bf -= 2 * qty; }
+        if (item.type === 'saude') { stats.energia += 5 * qty; stats.foco += 5 * qty; }
+        if (item.type === 'acessorios') { stats.foco += 5 * qty; }
+      });
+      return {
+        hipertrofia: Math.min(stats.hipertrofia, 100),
+        energia: Math.min(stats.energia, 100),
+        foco: Math.min(stats.foco, 100),
+        bf: Math.max(stats.bf, 4)
+      };
+    }
+
+    function getCartTotal() {
+      return cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    }
+
+    function getCartCount() {
+      return cart.reduce((a, c) => a + c.quantity, 0);
+    }
+
+    // --- RENDER FUNCTIONS ---
+    function renderCategoryMenu() {
+      categoryMenu.innerHTML = categories.map(cat => `
+        <button data-category="${cat.id}" class="category-btn w-full text-left group relative bg-black/40 border-l-2 border-white/20 p-6 transition-all duration-300 hover:border-l-4 hover:border-[#e3b341] hover:bg-gradient-to-r hover:from-[#b91d1d]/20 hover:to-transparent hover:pl-8">
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="font-cinzel text-xl md:text-2xl text-white group-hover:text-[#e3b341] transition-colors">${cat.label}</h3>
+              <p class="font-roboto text-sm text-gray-500 uppercase tracking-wider mt-1 group-hover:text-gray-300">${cat.desc}</p>
+            </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[#e3b341] text-2xl">⚔️</span>
+          </div>
+        </button>
+      `).join('');
+
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentFilter = btn.dataset.category;
+          showShop();
+        });
+      });
+    }
+
+    function renderNavTabs() {
+      navTabsContainer.innerHTML = navTabs.map(tab => `
+        <button data-filter="${tab.id}" class="nav-tab bg-transparent border-none font-cinzel text-xs uppercase transition-all duration-300 relative py-1 ${currentFilter === tab.id ? 'text-white opacity-100' : 'text-gray-400 opacity-60 hover:opacity-100 hover:text-white'}">
+          ${tab.label}
+          ${currentFilter === tab.id ? '<span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#e3b341] shadow-[0_0_5px_#e3b341]"></span>' : ''}
+        </button>
+      `).join('');
+
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentFilter = btn.dataset.filter;
+          renderNavTabs();
+          renderProducts();
+        });
+      });
+    }
+
+    function renderPlayerStats() {
+      const stats = calculatePlayerStats();
+      playerStatsContainer.innerHTML = `
+        <div class="flex justify-between group">
+          <span class="group-hover:text-white transition-colors">Hipertrofia</span>
+          <span class="text-[#3b82f6] font-bold">${stats.hipertrofia}%</span>
+        </div>
+        <div class="flex justify-between group">
+          <span class="group-hover:text-white transition-colors">Energia</span>
+          <span class="font-bold ${stats.energia >= 100 ? 'text-[#b91d1d] animate-pulse' : 'text-[#3b82f6]'}">${stats.energia >= 100 ? 'SOBRECARGA' : stats.energia + '%'}</span>
+        </div>
+        <div class="flex justify-between group">
+          <span class="group-hover:text-white transition-colors">Foco</span>
+          <span class="font-bold ${stats.foco >= 100 ? 'text-[#e3b341]' : 'text-[#3b82f6]'}">${stats.foco >= 100 ? 'INSTINTO SUPERIOR' : stats.foco + '%'}</span>
+        </div>
+        <div class="flex justify-between group">
+          <span class="group-hover:text-white transition-colors">BF%</span>
+          <span class="text-[#3b82f6] font-bold">${stats.bf.toFixed(1)}%</span>
+        </div>
+      `;
+    }
+
+    function renderProducts() {
+      const filteredItems = currentFilter === 'all' ? inventory : inventory.filter(item => item.type === currentFilter);
+      
+      productsGrid.innerHTML = filteredItems.map(item => {
+        let borderColorClass = "border-t-gray-600";
+        if (item.rarity === "lendario") borderColorClass = "border-t-[#e3b341]";
+        if (item.rarity === "raro") borderColorClass = "border-t-[#3b82f6]";
+
+        return `
+          <div class="card-3d relative bg-[#1e1e23]/40 border border-white/10 overflow-hidden hover:border-white/30 hover:bg-[#28282d]/60 hover:z-10 border-t-2 ${borderColorClass} flex flex-col h-full fade-in" data-id="${item.id}">
+            <div class="p-5 relative z-[2] flex flex-col h-full">
+              <div class="h-36 flex justify-center items-center mb-4 shrink-0 overflow-hidden rounded-md bg-black/20">
+                ${item.image ? `<img src="${item.image}" alt="${item.name}" class="h-full w-full object-contain opacity-90 transition-transform duration-300 hover:scale-110"/>` : `<div class="text-6xl opacity-90 drop-shadow-2xl">${item.icon}</div>`}
+              </div>
+              <span class="text-[0.7rem] text-[#3b82f6] uppercase tracking-widest block mb-2 font-roboto">${item.type}</span>
+              <h3 class="font-cinzel text-[1.1rem] text-gray-100 mb-1 uppercase leading-tight min-h-[3rem]">${item.name}</h3>
+              <div class="flex flex-wrap gap-2 mb-4 text-[0.7rem] opacity-80 font-roboto text-gray-300">
+                ${item.stats.map(stat => `<span class="bg-white/5 px-2 py-0.5 border border-white/10 rounded-sm">${stat}</span>`).join('')}
+              </div>
+              <p class="text-xs text-gray-400 mb-5 leading-relaxed flex-grow font-roboto">${item.desc}</p>
+              <div class="mb-4 flex items-baseline gap-1">
+                <span class="text-xs text-gray-500">R$</span>
+                <span class="text-xl text-[#e3b341] font-bold font-roboto">${item.price?.toFixed(2) || '---'}</span>
+              </div>
+              <div class="mt-auto flex gap-2">
+                <button class="details-btn flex-1 bg-transparent border border-white/20 text-gray-300 py-2.5 font-roboto text-xs font-bold uppercase tracking-widest transition-all duration-200 flex justify-center items-center gap-2 group hover:bg-white/10 hover:text-white hover:border-white">
+                  <span class="w-4 h-4 border border-current rounded-full inline-flex items-center justify-center text-[0.6rem]">O</span>
+                  Detalhes
+                </button>
+                <button class="buy-btn flex-1 bg-transparent border border-white/20 text-gray-300 py-2.5 font-roboto text-xs font-bold uppercase tracking-widest transition-all duration-200 flex justify-center items-center gap-2 group hover:bg-[#b91d1d] hover:text-white hover:border-[#b91d1d] hover:shadow-[0_0_15px_#b91d1d]">
+                  <span class="w-4 h-4 border border-current rounded-full inline-flex items-center justify-center text-[0.6rem]">X</span>
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Add event listeners
+      document.querySelectorAll('.card-3d').forEach(card => {
+        const id = parseInt(card.dataset.id);
+        const item = inventory.find(i => i.id === id);
+
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -8;
+          const rotateY = ((x - centerX) / centerX) * 8;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+        });
+
+        card.querySelector('.buy-btn').addEventListener('click', () => addToCart(item));
+        card.querySelector('.details-btn').addEventListener('click', () => openProductDetails(item));
+      });
+    }
+
+    function renderCart() {
+      const total = getCartTotal();
+      const count = getCartCount();
+
+      cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+      cartTotalHeader.textContent = `R$ ${total.toFixed(2)}`;
+
+      if (count > 0) {
+        cartBadge.textContent = count;
+        cartBadge.classList.remove('hidden');
+      } else {
+        cartBadge.classList.add('hidden');
+      }
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="text-center text-gray-600 mt-20 font-roboto italic">Seu inventário está vazio, guerreiro.</div>';
+      } else {
+        cartItemsContainer.innerHTML = cart.map(item => `
+          <div class="cart-item bg-white/5 border border-white/10 p-3 flex gap-3 relative group" data-id="${item.id}">
+            <div class="w-16 h-16 bg-black/40 flex items-center justify-center border border-white/10 shrink-0">
+              <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain p-1"/>
+            </div>
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div>
+                <h4 class="font-cinzel text-sm text-gray-200 truncate pr-6">${item.name}</h4>
+                <span class="text-xs text-[#e3b341]">R$ ${(item.price * item.quantity).toFixed(2)}</span>
+              </div>
+              <div class="flex items-center gap-3 bg-black/40 w-fit px-2 border border-white/10 mt-2">
+                <button class="qty-minus text-gray-400 hover:text-white px-1 font-bold">-</button>
+                <span class="text-xs font-mono w-4 text-center">${item.quantity}</span>
+                <button class="qty-plus text-gray-400 hover:text-white px-1 font-bold">+</button>
+              </div>
+            </div>
+            <button class="remove-btn absolute top-2 right-2 text-gray-600 hover:text-[#b91d1d] opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
+          </div>
+        `).join('');
+
+        document.querySelectorAll('.cart-item').forEach(el => {
+          const id = parseInt(el.dataset.id);
+          el.querySelector('.qty-minus').addEventListener('click', () => updateQty(id, -1));
+          el.querySelector('.qty-plus').addEventListener('click', () => updateQty(id, 1));
+          el.querySelector('.remove-btn').addEventListener('click', () => removeFromCart(id));
+        });
+      }
+
+      renderPlayerStats();
+    }
+
+    function renderOracleMessages() {
+      oracleMessagesContainer.innerHTML = oracleMessages.map(msg => `
+        <div class="oracle-message p-3 rounded-lg text-sm ${msg.role === 'user' ? 'bg-[#e3b341]/10 border border-[#e3b341]/20 ml-8' : 'bg-[#1a1a1a] border border-white/10 mr-8'}">
+          <p class="${msg.role === 'user' ? 'text-gray-200' : 'text-[#e3b341]'}">${msg.text}</p>
+        </div>
+      `).join('');
+      oracleMessagesContainer.scrollTop = oracleMessagesContainer.scrollHeight;
+    }
+
+    function renderAdminList() {
+      document.getElementById('admin-count').textContent = `Inventário (${inventory.length})`;
+      adminList.innerHTML = inventory.map(item => `
+        <div class="admin-item p-3 cursor-pointer border transition-all flex items-center gap-3 ${selectedAdminItem?.id === item.id ? 'border-[#e3b341] bg-[#e3b341]/10' : 'border-white/5 hover:bg-white/5'}" data-id="${item.id}">
+          <div class="w-8 h-8 bg-black flex items-center justify-center rounded overflow-hidden">
+            ${item.image ? `<img src="${item.image}" class="w-full h-full object-cover"/>` : `<span>${item.icon}</span>`}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-bold text-gray-200 truncate">${item.name}</div>
+            <div class="text-xs text-gray-500">R$ ${item.price?.toFixed(2)}</div>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.admin-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = parseInt(el.dataset.id);
+          selectedAdminItem = inventory.find(i => i.id === id);
+          fillAdminForm();
+          renderAdminList();
+        });
+      });
+    }
+
+    function fillAdminForm() {
+      const item = selectedAdminItem;
+      document.getElementById('admin-form-title').textContent = item ? 'Editar Item' : 'Novo Item';
+      document.getElementById('save-item-btn').textContent = item ? 'Salvar Alterações' : 'Cadastrar Item';
+      document.getElementById('delete-item-btn').classList.toggle('hidden', !item);
+
+      document.getElementById('item-name').value = item?.name || '';
+      document.getElementById('item-price').value = item?.price || '';
+      document.getElementById('item-type').value = item?.type || 'proteina';
+      document.getElementById('item-rarity').value = item?.rarity || 'comum';
+      document.getElementById('item-image').value = item?.image || '';
+      document.getElementById('item-icon').value = item?.icon || '📦';
+      document.getElementById('item-stats').value = item?.stats?.join(', ') || '';
+      document.getElementById('item-desc').value = item?.desc || '';
+
+      updateImagePreview();
+    }
+
+    function updateImagePreview() {
+      const url = document.getElementById('item-image').value;
+      const preview = document.getElementById('item-image-preview');
+      const img = document.getElementById('item-image-img');
+      if (url) {
+        img.src = url;
+        preview.classList.remove('hidden');
+      } else {
+        preview.classList.add('hidden');
+      }
+    }
+
+    // --- CART FUNCTIONS ---
+    function addToCart(item) {
+      const existing = cart.find(i => i.id === item.id);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...item, quantity: 1 });
+      }
+      saveCart();
+      renderCart();
+      openCart();
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(i => i.id !== id);
+      saveCart();
+      renderCart();
+    }
+
+    function updateQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.quantity += delta;
+        if (item.quantity <= 0) {
+          removeFromCart(id);
+          return;
+        }
+      }
+      saveCart();
+      renderCart();
+    }
+
+    function openCart() {
+      cartDrawer.classList.remove('translate-x-full');
+      cartBackdrop.classList.remove('hidden');
+    }
+
+    function closeCart() {
+      cartDrawer.classList.add('translate-x-full');
+      cartBackdrop.classList.add('hidden');
+    }
+
+    // --- CHECKOUT ---
+    function handleCheckout() {
+      if (cart.length === 0) return;
+
+      const phoneNumber = "556198291299";
+      let message = "*⚔️ NOVO PEDIDO - LOJA DO KRATOS ⚔️*\n\n";
+      message += "Olá! Gostaria de adquirir os seguintes itens do arsenal:\n\n";
+
+      cart.forEach(item => {
+        message += `▪️ ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+      });
+
+      message += `\n*💰 TOTAL DO TRIBUTO: R$ ${getCartTotal().toFixed(2)}*`;
+      message += "\n\nAguardo as instruções para o pagamento.";
+
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    }
+
+    // --- PRODUCT DETAILS ---
+    function openProductDetails(item) {
+      const htmlContent = `<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${item.name} | Loja do Kratos</title><link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet"><style>:root{--bg-deep:#050505;--text-gold:#e3b341;--accent-red:#b91d1d;--font-title:'Cinzel',serif;--font-ui:'Roboto Condensed',sans-serif}body{background-color:var(--bg-deep);color:#9ca3af;font-family:var(--font-ui);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;background-image:radial-gradient(circle at 50% 50%,#1a202c 0%,#000 90%)}.card{max-width:800px;width:90%;padding:40px;border:1px solid rgba(255,255,255,0.1);background:rgba(20,20,25,0.85);backdrop-filter:blur(10px);text-align:center;box-shadow:0 0 50px rgba(0,0,0,0.8);position:relative;overflow:hidden}.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:var(--text-gold);box-shadow:0 0 15px var(--text-gold)}img{max-height:400px;max-width:100%;object-fit:contain;margin-bottom:30px;filter:drop-shadow(0 0 20px rgba(0,0,0,0.5))}h1{color:white;font-family:var(--font-title);font-size:2.5rem;text-transform:uppercase;margin-bottom:10px;letter-spacing:2px}.meta{color:var(--text-gold);font-size:0.9rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;opacity:0.8}.desc{font-size:1.1rem;line-height:1.6;margin-bottom:30px;color:#ccc}.stats{display:flex;justify-content:center;gap:10px;margin-bottom:30px}.stat-pill{background:rgba(255,255,255,0.05);padding:5px 15px;border:1px solid rgba(255,255,255,0.1);text-transform:uppercase;font-size:0.8rem;letter-spacing:1px}.price{color:var(--text-gold);font-size:3rem;font-weight:bold;margin:20px 0;font-family:var(--font-title)}.btn{background:transparent;color:white;padding:15px 40px;text-decoration:none;text-transform:uppercase;font-weight:bold;display:inline-block;margin-top:20px;border:1px solid rgba(255,255,255,0.3);letter-spacing:2px;cursor:pointer;transition:all 0.3s}.btn:hover{background:var(--text-gold);color:black;border-color:var(--text-gold);box-shadow:0 0 20px rgba(227,179,65,0.4)}</style></head><body><div class="card"><img src="${item.image}" alt="${item.name}"><div class="meta">${item.type} | ${item.rarity}</div><h1>${item.name}</h1><div class="stats">${item.stats.map(s => `<span class="stat-pill">${s}</span>`).join('')}</div><p class="desc">${item.desc}</p><div class="price">R$ ${item.price.toFixed(2)}</div><button class="btn" onclick="window.close()">Fechar Pergaminho</button></div></body></html>`;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      window.open(URL.createObjectURL(blob), '_blank');
+    }
+
+    // --- ORACLE ---
+    async function sendOracleMessage(userMsg) {
+      oracleMessages.push({ role: 'user', text: userMsg });
+      renderOracleMessages();
+
+      // Simulated AI response
+      const responses = [
+        `Para ${userMsg.toLowerCase().includes('energia') ? 'energia' : 'força'}, recomendo um pré-treino de elite, guerreiro.`,
+        "Os deuses recomendam creatina para aumentar tua força bruta na batalha.",
+        "Proteína é essencial para reconstruir os músculos após cada combate.",
+        "Omega 3 fortalece teu coração de guerreiro espartano.",
+        "Para foco absoluto, o Pré Treino Panic é a escolha dos campeões."
+      ];
+
+      setTimeout(() => {
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        oracleMessages.push({ role: 'system', text: response });
+        renderOracleMessages();
+      }, 1000);
+    }
+
+    // --- LOGIN ---
+    function openLoginModal() {
+      loginModal.classList.remove('hidden');
+      document.getElementById('login-password').focus();
+    }
+
+    function closeLoginModal() {
+      loginModal.classList.add('hidden');
+      document.getElementById('login-password').value = '';
+      document.getElementById('login-error').classList.add('hidden');
+    }
+
+    // --- ADMIN ---
+    function openAdminModal() {
+      adminModal.classList.remove('hidden');
+      selectedAdminItem = null;
+      fillAdminForm();
+      renderAdminList();
+    }
+
+    function closeAdminModal() {
+      adminModal.classList.add('hidden');
+    }
+
+    function saveItem() {
+      const newItem = {
+        id: selectedAdminItem?.id || Date.now(),
+        name: document.getElementById('item-name').value,
+        price: parseFloat(document.getElementById('item-price').value) || 0,
+        type: document.getElementById('item-type').value,
+        rarity: document.getElementById('item-rarity').value,
+        image: document.getElementById('item-image').value,
+        icon: document.getElementById('item-icon').value,
+        stats: document.getElementById('item-stats').value.split(',').map(s => s.trim()).filter(Boolean),
+        desc: document.getElementById('item-desc').value
+      };
+
+      const existingIndex = inventory.findIndex(i => i.id === newItem.id);
+      if (existingIndex >= 0) {
+        inventory[existingIndex] = newItem;
+      } else {
+        inventory.unshift(newItem);
+      }
+
+      selectedAdminItem = null;
+      fillAdminForm();
+      renderAdminList();
+      renderProducts();
+    }
+
+    function deleteItem() {
+      if (selectedAdminItem && confirm("Tem certeza que deseja remover este item do inventário?")) {
+        inventory = inventory.filter(i => i.id !== selectedAdminItem.id);
+        selectedAdminItem = null;
+        fillAdminForm();
+        renderAdminList();
+        renderProducts();
+      }
+    }
+
+    // --- VIEW MANAGEMENT ---
+    function showLanding() {
+      currentView = 'landing';
+      landingPage.classList.remove('hidden');
+      shopPage.classList.add('hidden');
+    }
+
+    function showShop() {
+      currentView = 'shop';
+      landingPage.classList.add('hidden');
+      shopPage.classList.remove('hidden');
+      renderNavTabs();
+      renderProducts();
+      renderPlayerStats();
+      renderCart();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- EVENT LISTENERS ---
+    document.getElementById('back-btn').addEventListener('click', showLanding);
+    document.getElementById('cart-toggle').addEventListener('click', openCart);
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+    document.getElementById('cart-backdrop').addEventListener('click', closeCart);
+    document.getElementById('checkout-btn').addEventListener('click', handleCheckout);
+
+    document.getElementById('oracle-btn').addEventListener('click', () => {
+      oracleChat.classList.toggle('hidden');
+      oracleChat.classList.toggle('flex');
+      renderOracleMessages();
+    });
+    document.getElementById('oracle-close').addEventListener('click', () => {
+      oracleChat.classList.add('hidden');
+      oracleChat.classList.remove('flex');
+    });
+    document.getElementById('oracle-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('oracle-input');
+      if (input.value.trim()) {
+        sendOracleMessage(input.value.trim());
+        input.value = '';
+      }
+    });
+
+    document.getElementById('admin-lock-btn').addEventListener('click', openLoginModal);
+    document.getElementById('login-cancel').addEventListener('click', closeLoginModal);
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const pass = document.getElementById('login-password').value;
+      if (pass === '0043') {
+        closeLoginModal();
+        openAdminModal();
+      } else {
+        document.getElementById('login-error').classList.remove('hidden');
+        document.getElementById('login-password').value = '';
+      }
+    });
+
+    document.getElementById('admin-close').addEventListener('click', closeAdminModal);
+    document.getElementById('admin-new-btn').addEventListener('click', () => {
+      selectedAdminItem = null;
+      fillAdminForm();
+      renderAdminList();
+    });
+    document.getElementById('item-image').addEventListener('input', updateImagePreview);
+    document.getElementById('admin-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveItem();
+    });
+    document.getElementById('delete-item-btn').addEventListener('click', deleteItem);
+    document.getElementById('generate-desc-btn').addEventListener('click', () => {
+      const name = document.getElementById('item-name').value;
+      const type = document.getElementById('item-type').value;
+      if (!name) { alert("Preencha o nome do produto primeiro!"); return; }
+      
+      const descs = [
+        `Elixir de ${type} forjado nas profundezas do Olimpo.`,
+        `Poção sagrada de força para guerreiros espartanos.`,
+        `Arma secreta dos deuses para batalhas épicas.`,
+        `Combustível divino para treinos implacáveis.`
+      ];
+      document.getElementById('item-desc').value = descs[Math.floor(Math.random() * descs.length)];
+    });
+
+    // --- INIT ---
+    renderCategoryMenu();
+    renderCart();
+  </script>
+</body>
+</html>
